@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 
-package Atividade01_LesMiserables.lib;
+package lib;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;

@@ -27,7 +27,7 @@
  *
  ******************************************************************************/
 
- package Atividade01_LesMiserables.lib;
+ package lib;
 
  import java.util.Iterator;
  import java.util.NoSuchElementException;

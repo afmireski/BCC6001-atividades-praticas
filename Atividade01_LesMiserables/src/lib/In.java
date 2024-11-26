@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 
- package Atividade01_LesMiserables.lib;
+ package lib;
 
  import java.io.BufferedInputStream;
  import java.io.File;
