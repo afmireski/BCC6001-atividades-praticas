@@ -94,7 +94,6 @@ public class Main {
 
     private static double[] calculateClosenessCentrality(Graph graph) {
         // 1. Calcular: total de vértices -1 / soma de todas as distâncias mínimas a partir do vértice fonte para os outros vértices
-        // 
 
 
         int verticesCount = graph.V();
