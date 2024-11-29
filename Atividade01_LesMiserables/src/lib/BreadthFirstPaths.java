@@ -269,8 +269,18 @@
                 max = this.distTo[i];
             }
         }
-        
+
         return max;
+     }
+
+     public int sumDistTo() {
+        int sum = 0;
+
+        for (int i = 0; i < this.distTo.length; i++) {
+            sum += this.distTo[i];
+        }
+
+        return sum;
      }
  
      /**

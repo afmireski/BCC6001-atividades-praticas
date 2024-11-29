@@ -17,12 +17,20 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Graph graph = readGraphFromGexf();
 
+        System.out.println("Les Miserables Graph: ");
         StdOut.println(graph);
 
         int[] eccentricities = calculateEccentricity(graph);
         System.out.println("Excentricidades: ");
         for (int i = 0; i < eccentricities.length; i++) {
             StdOut.println("Excentricidade do vértice " + i + ": " + eccentricities[i]);
+        }
+        System.out.println();
+
+        double[] ccs = calculateClosenessCentrality(graph);
+        System.out.println("Closeness Centralities: ");
+        for (int i = 0; i < eccentricities.length; i++) {
+            StdOut.printf("CC do vértice %d: %.6f\n", i, ccs[i]);
         }
         System.out.println();
     }
@@ -82,5 +90,25 @@ public class Main {
         }
 
         return eccentricities;
+    }
+
+    private static double[] calculateClosenessCentrality(Graph graph) {
+        // 1. Calcular: total de vértices -1 / soma de todas as distâncias mínimas a partir do vértice fonte para os outros vértices
+        // 
+
+
+        int verticesCount = graph.V();
+
+        double values[] = new double[verticesCount];
+        for (int v = 0; v < verticesCount; v++) {
+            BreadthFirstPaths bfp = new BreadthFirstPaths(graph, v);
+
+            double distToSum = (double) bfp.sumDistTo();
+            double closenessCentrality = (verticesCount - 1) / distToSum;
+
+            values[v] = closenessCentrality;
+        }
+
+        return values;
     }
 }
