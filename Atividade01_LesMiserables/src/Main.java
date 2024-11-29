@@ -8,11 +8,26 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import lib.BreadthFirstPaths;
 import lib.Graph;
 import lib.StdOut;
 
 public class Main {
 
+    public static void main(String[] args) throws Exception {
+        Graph graph = readGraphFromGexf();
+
+        StdOut.println(graph);
+
+        int[] eccentricities = calculateEccentricity(graph);
+        System.out.println("Excentricidades: ");
+        for (int i = 0; i < eccentricities.length; i++) {
+            StdOut.println("Excentricidade do vértice " + i + ": " + eccentricities[i]);
+        }
+        System.out.println();
+    }
+
+    
     private static Graph readGraphFromGexf() throws Exception {
 
         final String GEXF_FILE = System.getProperty("user.dir") + "/src/data/LesMiserables.gexf";
@@ -50,9 +65,22 @@ public class Main {
         return graph;
     }
 
-    public static void main(String[] args) throws Exception {
-        Graph graph = readGraphFromGexf();
+    private static int[] calculateEccentricity(Graph graph) {
+        // 1. Roda a busca em largura
+        // 2. Obtém todas as distâncias mínimas a partir do vértice fonte para os outros vértices
+        // 3. Obtém a maior distância mínima (excentricidade)
 
-        StdOut.println(graph);
+        int verticesCount = graph.V();
+
+        int eccentricities[] = new int[verticesCount];
+        for (int v = 0; v < verticesCount; v++) {
+            BreadthFirstPaths bfp = new BreadthFirstPaths(graph, v);
+
+            int eccentricity = bfp.greatestDist();
+
+            eccentricities[v] = eccentricity;
+        }
+
+        return eccentricities;
     }
 }
