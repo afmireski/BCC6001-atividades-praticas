@@ -20,22 +20,15 @@ public class Main {
         System.out.println("Les Miserables Graph: ");
         StdOut.println(graph);
 
-        int[] eccentricities = calculateEccentricity(graph);
-        System.out.println(" Betweenness Centrality: ");
-        for (int i = 0; i < eccentricities.length; i++) {
-            StdOut.println("Excentricidade do vértice " + i + ": " + eccentricities[i]);
-        }
-        System.out.println();
 
-        double[] ccs = calculateClosenessCentrality(graph);
-        System.out.println("Closeness Centralities: ");
-        for (int i = 0; i < eccentricities.length; i++) {
-            StdOut.printf("CC do vértice %d: %.6f\n", i, ccs[i]);
+        System.out.println("Betweenness Centrality: ");
+        double[] bcs = calculateBetweennessCentrality(graph);
+        for (int i = 0; i < bcs.length; i++) {
+            StdOut.println("Betweenness Centrality do vértice " + i + ": " + bcs[i]);
         }
         System.out.println();
     }
 
-    
     private static Graph readGraphFromGexf() throws Exception {
 
         final String GEXF_FILE = System.getProperty("user.dir") + "/src/data/LesMiserables.gexf";
@@ -66,46 +59,27 @@ public class Main {
                 Integer source = (int) Float.parseFloat(element.getAttribute("source"));
                 Integer target = (int) Float.parseFloat(element.getAttribute("target"));
 
-                graph.addEdge(source, target);                
+                graph.addEdge(source, target);
             }
         }
 
         return graph;
     }
 
-    private static int[] calculateEccentricity(Graph graph) {
-        // 1. Roda a busca em largura
-        // 2. Obtém todas as distâncias mínimas a partir do vértice fonte para os outros vértices
-        // 3. Obtém a maior distância mínima (excentricidade)
-
-        int verticesCount = graph.V();
-
-        int eccentricities[] = new int[verticesCount];
-        for (int v = 0; v < verticesCount; v++) {
-            BreadthFirstPaths bfp = new BreadthFirstPaths(graph, v);
-
-            int eccentricity = bfp.greatestDist();
-
-            eccentricities[v] = eccentricity;
-        }
-
-        return eccentricities;
-    }
-
-    private static double[] calculateClosenessCentrality(Graph graph) {
-        // 1. Calcular: total de vértices -1 / soma de todas as distâncias mínimas a partir do vértice fonte para os outros vértices
-
+    private static double[] calculateBetweennessCentrality(Graph graph) {
+        // 1. Calcular o número total de pares de nós únicos
+        // 2. Para cada nó, calcular o número total de caminhos mais curtos
+        // 3. Para cada par de nós, calcular o número de caminhos mais curtos entre eles
 
         int verticesCount = graph.V();
 
         double values[] = new double[verticesCount];
-        for (int v = 0; v < verticesCount; v++) {
-            BreadthFirstPaths bfp = new BreadthFirstPaths(graph, v);
+        int source = 0;
+        BreadthFirstPaths bfp = new BreadthFirstPaths(graph, source);
 
-            double distToSum = (double) bfp.sumDistTo();
-            double closenessCentrality = (verticesCount - 1) / distToSum;
-
-            values[v] = closenessCentrality;
+        bfp.computeSpCount(graph, source);
+        for (int v = 0; v < verticesCount; v++) {            
+            values[v] = bfp.calculateBetweennessCentrality(graph, v);
         }
 
         return values;
