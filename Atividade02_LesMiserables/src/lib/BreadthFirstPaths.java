@@ -309,31 +309,6 @@ public class BreadthFirstPaths {
         return this.distTo.length;
     }
 
-    public void computeSpCount(Graph graph, int source) {
-        for (int t = 0; t < graph.V(); t++) {
-            if (source != t) {
-                final int target = t;
-                this.pathTo(t).forEach((v) -> {
-                    if (v != source && v != target) {
-                        // Sempre que meu vértice for diferente de s e t, incremento a contagem de
-                        // caminhos mais curtos, pois isso significa que um caminho mais curto passou
-                        // por v.
-                        this.spCount[v]++;
-                    }
-                });
-
-                // System.out.println("spCount[" + t + "]: " + this.spCount[t]);
-            }
-        }
-    }
-
-    public double calculateBetweennessCentrality(Graph graph, int v) {
-
-        this.betweennessCentrality[v] = (double) this.spCount[v] / this.distToCount();
-
-        return this.betweennessCentrality[v];
-     }
-
     /**
      * Unit tests the {@code BreadthFirstPaths} data type.
      *
@@ -345,7 +320,7 @@ public class BreadthFirstPaths {
         // StdOut.println(G);
 
         int s = Integer.parseInt(args[1]);
-        BreadthFirstPaths bfs = new BreadthFirstPaths(G, s);
+        BreadthFirstPathsBC bfs = new BreadthFirstPathsBC(G, s);
 
         for (int v = 0; v < G.V(); v++) {
             if (bfs.hasPathTo(v)) {

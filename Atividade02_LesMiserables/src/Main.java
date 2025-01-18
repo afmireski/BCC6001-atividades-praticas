@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import lib.BreadthFirstPaths;
+import lib.BreadthFirstPathsBC;
 import lib.Graph;
 import lib.StdOut;
 
@@ -71,17 +71,9 @@ public class Main {
         // 2. Para cada nó, calcular o número total de caminhos mais curtos
         // 3. Para cada par de nós, calcular o número de caminhos mais curtos entre eles
 
-        int verticesCount = graph.V();
+        BreadthFirstPathsBC bfp = new BreadthFirstPathsBC(graph);
+        double bcs[] = bfp.getBetweennessCentrality();
 
-        double values[] = new double[verticesCount];
-        int source = 0;
-        BreadthFirstPaths bfp = new BreadthFirstPaths(graph, source);
-
-        bfp.computeSpCount(graph, source);
-        for (int v = 0; v < verticesCount; v++) {            
-            values[v] = bfp.calculateBetweennessCentrality(graph, v);
-        }
-
-        return values;
+        return bcs;
     }
 }
