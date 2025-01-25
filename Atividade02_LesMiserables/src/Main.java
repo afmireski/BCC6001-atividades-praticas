@@ -66,10 +66,17 @@ public class Main {
         return graph;
     }
 
+    /**
+     * O que é a Betweeness Centratility?
+     * 
+     * É uma medida de centralidade em grafos que indica 
+     * o quanto um nó é usado como rota em caminhos mais curtos que levam a outros nós.
+     * Pode-se presumir que quanto maior a centralidade de um nó, mais caminhos passam por ele,
+     * o que indica que ele têm uma importância maior dentro do grafo.
+     * 
+     * Seu cálculo é dado pela divisão entre o número total de caminhos mais curtos entre os nós s e t, que passam pelo vértice v, e o número total de caminhos mais curtos entre os vértices s e t.
+     */
     private static double[] calculateBetweennessCentrality(Graph graph) {
-        // 1. Calcular o número total de pares de nós únicos
-        // 2. Para cada nó, calcular o número total de caminhos mais curtos
-        // 3. Para cada par de nós, calcular o número de caminhos mais curtos entre eles
 
         BreadthFirstPathsBC bfp = new BreadthFirstPathsBC(graph);
         double bcs[] = bfp.getBetweennessCentrality();

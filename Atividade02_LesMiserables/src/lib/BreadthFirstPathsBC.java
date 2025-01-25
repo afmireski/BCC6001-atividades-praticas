@@ -4,9 +4,9 @@ import java.util.*;
 
 public class BreadthFirstPathsBC {
     private static final int INFINITY = Integer.MAX_VALUE;
-    private boolean[] marked; // marked[v] = is there an s-v path
-    private int[] distTo; // distTo[v] = number of edges shortest s-v path
-    private double[] betweennessCentrality; // Betweenness centrality of each vertex
+    private boolean[] marked; // marked[v] = se é um caminho entre s-v
+    private int[] distTo; // distTo[v] = número de caminhos mais curtos entre s-v
+    private double[] betweennessCentrality; // Betweenness centrality de cada vértice
 
     public BreadthFirstPathsBC(Graph G) {
         marked = new boolean[G.V()];
@@ -14,12 +14,12 @@ public class BreadthFirstPathsBC {
         betweennessCentrality = new double[G.V()];
         Arrays.fill(betweennessCentrality, 0.0);
 
-        // Calculate betweenness centrality for all vertices
+        // Calcular a betweenness centrality de todos os vértices
         for (int s = 0; s < G.V(); s++) {
             bfsWithBetweenness(G, s);
         }
 
-        // Normalize betweenness centrality (divide by 2 for undirected graphs)
+        // Normalização da betweenness centrality (dividir por dois no caso de grafos de não direcionados)
         for (int v = 0; v < G.V(); v++) {
             betweennessCentrality[v] /= 2.0;
         }
@@ -27,11 +27,11 @@ public class BreadthFirstPathsBC {
 
     private void bfsWithBetweenness(Graph G, int s) {
         LinkedList<Integer> queue = new LinkedList<>();
-        Stack<Integer> stack = new Stack<>(); // To track the order of processing
-        int[] sigma = new int[G.V()];         // Number of shortest paths passing through each vertex
-        double[] delta = new double[G.V()];   // Dependency values for vertices
+        Stack<Integer> stack = new Stack<>(); // Fila com a ordem de processamento dos nós
+        int[] sigma = new int[G.V()];         // Número de caminhos mais curtos que passam por cada vértice
+        double[] delta = new double[G.V()];   // Valores de dependência acumulada de cada vértice (Grau de importância)
 
-        // Initialize
+        // Inicialização
         Arrays.fill(sigma, 0);
         Arrays.fill(delta, 0.0);
         Arrays.fill(marked, false);
@@ -41,7 +41,7 @@ public class BreadthFirstPathsBC {
         marked[s] = true;
         queue.add(s);
 
-        // BFS: Calculate shortest paths and distances
+        // BFS: Calcula menores caminhos e distâncias
         while (!queue.isEmpty()) {
             int v = queue.poll();
             stack.push(v);
@@ -52,18 +52,19 @@ public class BreadthFirstPathsBC {
                     distTo[w] = distTo[v] + 1;
                     queue.add(w);
                 }
-                if (distTo[w] == distTo[v] + 1) { // Found a shortest path
+                if (distTo[w] == distTo[v] + 1) { // Encontrou um caminho mais curto
                     sigma[w] += sigma[v];
                 }
             }
         }
 
-        // Bottom-up: Calculate dependencies
+        // Bottom-up: Calcula os graus de importância de cada vértice 
+        // em relação aos outros vértices, começando dos mais distantes para os mais próximos
         while (!stack.isEmpty()) {
             int w = stack.pop();
-            for (int v : G.adj(w)) {
+            for (int v : G.adj(w)) { // Verifica se v é predecessor de w
                 if (distTo[v] == distTo[w] - 1) {
-                    delta[v] += ((double) sigma[v] / sigma[w]) * (1 + delta[w]);
+                    delta[v] += ((double) sigma[v] / sigma[w]) * (1 + delta[w]); // Calcula o grau de importância de v
                 }
             }
             if (w != s) {
